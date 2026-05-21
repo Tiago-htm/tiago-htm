@@ -1,0 +1,115 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<nav class="navbar">
+
+    
+  <div class="nav-left">
+    <a href="https://github.com/Tiago-htm" target="_blank" aria-label="GitHub">
+      <Icon name="lucide:github" />
+    </a>
+    <a href="https://linkedin.com/in/seu-usuario" target="_blank" aria-label="LinkedIn">
+      <Icon name="lucide:linkedin" />
+    </a>
+  </div>
+
+  <div class="nav-right">
+        <button id="theme-toggle" aria-label="Alternar tema">
+    <Icon name="lucide:sun" class="icon-sun" />
+    <Icon name="lucide:moon" class="icon-moon" />
+    </button>
+    <a href="/" aria-label="Home">
+      <Icon name="lucide:house" />
+    </a>
+    <a href="#experience" aria-label="Experiência">
+      <Icon name="lucide:briefcase" />
+    </a>
+    <a href="#projects" aria-label="Projetos">
+      <Icon name="lucide:flask-conical" />
+    </a>
+  </div>
+</nav>
+
+<style>
+  .navbar {
+    position: fixed;
+    top: 5%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 10%;
+    z-index: 100;
+
+  }
+
+  a {
+    color: #888;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+  }
+
+  a:hover {
+    color: #fff;
+  }
+
+  [data-icon] {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .nav-left,
+  .nav-right {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  #theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+  padding: 0;
+}
+
+#theme-toggle:hover {
+  color: var(--text);
+}
+
+[data-icon] {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.icon-moon { display: none; }
+
+:root[data-theme="dark"] .icon-sun  { display: none; }
+:root[data-theme="dark"] .icon-moon { display: flex; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .icon-sun  { display: none; }
+  :root:not([data-theme="light"]) .icon-moon { display: flex; }
+}
+</style>
+
+
+<script>
+  const root = document.documentElement;
+  const btn = document.getElementById('theme-toggle');
+  const saved = localStorage.getItem('theme');
+
+  if (saved) root.setAttribute('data-theme', saved);
+
+  btn?.addEventListener('click', () => {
+    const current = root.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+</script>
