@@ -1,0 +1,70 @@
+---
+const { title, image, stack, slug } = Astro.props;
+---
+
+<a href={`/projects/${slug}`} class="card">
+  <div class="card-img">
+    <img src={image} alt={title} />
+  </div>
+  <div class="card-body">
+    <h3>{title}</h3>
+    <div class="stack">
+      {stack.map((s: string) => <span class="tag">{s}</span>)}
+    </div>
+  </div>
+</a>
+
+<style>
+  .card {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .card:hover {
+    border-color: var(--muted);
+    transform: translateY(-2px);
+  }
+
+  .card-img {
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    background: #111;
+  }
+
+  .card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    image-rendering: pixelated;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .stack {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--muted);
+    font-family: monospace;
+  }
+</style>

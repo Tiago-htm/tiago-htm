@@ -2,7 +2,13 @@
 import '../styles/global.css';
 import NavBar from '../components/NavBar.astro';
 import Footer from '../components/Footer.astro';
-import img from '../assets/img.png'
+import img from '../assets/img.png';
+import { getCollection } from 'astro:content';
+import ProjectCard from '../components/ProjectCard.astro';
+
+
+
+const projects = await getCollection('projects');
 ---
 
 <html lang="en">
@@ -29,23 +35,23 @@ import img from '../assets/img.png'
     </div>
     <span class="role">Backend Developer Intern</span>
     <ul>
-      <li>Otimizei pipeline DOCX→PDF com filas e container LibreOffice pré-aquecido, reduzindo ~80% no tempo de conversão</li>
-      <li>Refatorei pipeline de preenchimento de templates para processamento em batch com persistência em bulk e webhook assíncrono</li>
-    </ul>
+
+			<li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi pariatur iste velit ut officiis quo labore, sit eligendi autem obcaecati suscipit libero id perferendis voluptates! Iusto magnam ducimus adipisci quasi?</li>
+			<li>Lorem ipsum dolor sit amet consectetur, adipisicing elit. In molestiae voluptatem perferendis mollitia accusantium unde labore, repudiandae obcaecati, molestias quis fugit blanditiis dolorum quae illum, ex ut iure consequatur nisi.</li>
+			</ul>
   </div>
 </section>
-<section class="projects">
+<section class="projects" id="projects">
   <h2>Projetos</h2>
-
-  <div class="project-list">
-    <div class="project">
-      <div class="project-header">
-        <span class="project-name">João Jardineiro</span>
-        <span class="project-stack">Angular · NestJS · PostgreSQL</span>
-      </div>
-      <p>MVP de portfólio e painel administrativo para paisagista autônomo. Gestão de clientes, agendamentos e financeiro.</p>
-      <a href="https://github.com/Tiago-htm/JoaoJardineiroMVP" target="_blank">GitHub →</a>
-    </div>
+  <div class="project-grid">
+    {projects.map(p => (
+      <ProjectCard
+        title={p.data.title}
+        image={p.data.image}
+        stack={p.data.stack}
+        slug={p.slug}
+      />
+    ))}
   </div>
 </section>
 
@@ -143,6 +149,11 @@ import img from '../assets/img.png'
   font-size: 1.1rem;
 }
 
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
 .project-stack {
   font-size: 0.8rem;
   color: #888;

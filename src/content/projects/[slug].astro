@@ -1,0 +1,116 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map(p => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const project = await getEntry('projects', slug);
+const { Content } = await project.render();
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{project.data.title}</title>
+    <link rel="stylesheet" href="/styles/global.css" />
+  </head>
+  <body>
+    <main class="project-page">
+      <a href="/" class="back">← voltar</a>
+
+      <img src={project.data.image} alt={project.data.title} class="cover" />
+
+      <div class="meta">
+        <h1>{project.data.title}</h1>
+        <div class="stack">
+          {project.data.stack.map(s => <span class="tag">{s}</span>)}
+        </div>
+        {project.data.github && (
+          <a href={project.data.github} target="_blank" class="link">GitHub →</a>
+        )}
+      </div>
+
+      <article class="content">
+        <Content />
+      </article>
+    </main>
+  </body>
+</html>
+
+<style>
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, sans-serif;
+  }
+
+  .project-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+  }
+
+  .back {
+    display: inline-block;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
+    transition: color 0.2s;
+  }
+
+  .back:hover { color: var(--text); }
+
+  .cover {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 2rem;
+    image-rendering: pixelated;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .stack {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--muted);
+    font-family: monospace;
+  }
+
+  .link {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.2s;
+  }
+
+  .link:hover { color: var(--text); }
+
+  .content {
+    margin-top: 2.5rem;
+    line-height: 1.8;
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+
+  .content p { margin-bottom: 1.25rem; }
+</style>
