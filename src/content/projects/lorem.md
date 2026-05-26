@@ -1,6 +1,6 @@
 ---
 title: grafos
-image: /img/grafos.webp
+image: /tiago-htm/img/grafos.webp
 stack: [Angular, NestJS, PostgreSQL]
 github: https://github.com/Tiago-htm/
 ---
