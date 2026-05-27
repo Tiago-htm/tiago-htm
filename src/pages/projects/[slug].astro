@@ -1,23 +1,26 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import '../../styles/global.css';
+import { getCollection, getEntry, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
-  return projects.map(p => ({ params: { slug: p.slug } }));
+  return projects.map((p) => ({
+    params: { slug: p.id },
+  }));
 }
 
 const { slug } = Astro.params;
 const project = await getEntry('projects', slug);
-const { Content } = await project.render();
+if (!project) return Astro.redirect('/');
+const { Content } = await render(project);
 ---
 
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{project.data.title}</title>
-    <link rel="stylesheet" href="/styles/global.css" />
-  </head>
+ <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>{project.data.title}</title>
+</head>
   <body>
     <main class="project-page">
       <a href="/" class="back">← voltar</a>
@@ -27,11 +30,15 @@ const { Content } = await project.render();
       <div class="meta">
         <h1>{project.data.title}</h1>
         <div class="stack">
-          {project.data.stack.map(s => <span class="tag">{s}</span>)}
+          {project.data.stack.map((s) => <span class="tag">{s}</span>)}
         </div>
-        {project.data.github && (
-          <a href={project.data.github} target="_blank" class="link">GitHub →</a>
-        )}
+        {
+          project.data.github && (
+            <a href={project.data.github} target="_blank" class="link">
+              GitHub →
+            </a>
+          )
+        }
       </div>
 
       <article class="content">
@@ -63,7 +70,9 @@ const { Content } = await project.render();
     transition: color 0.2s;
   }
 
-  .back:hover { color: var(--text); }
+  .back:hover {
+    color: var(--text);
+  }
 
   .cover {
     width: 100%;
@@ -103,7 +112,9 @@ const { Content } = await project.render();
     transition: color 0.2s;
   }
 
-  .link:hover { color: var(--text); }
+  .link:hover {
+    color: var(--text);
+  }
 
   .content {
     margin-top: 2.5rem;
@@ -112,5 +123,7 @@ const { Content } = await project.render();
     color: var(--muted);
   }
 
-  .content p { margin-bottom: 1.25rem; }
+  .content p {
+    margin-bottom: 1.25rem;
+  }
 </style>
